@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Dynast.io — Custom PVP Only
-// @namespace    http://tampermonkey.net
-// @version      1.5
-// @description  Оставляет только один кастомный PVP сервер, убирая все оригинальные. С автообновлением.
+// @namespace    http://tampermonkey.net/
+// @version      1.4
+// @description  Оставляет только один кастомный PVP сервер, убирая все оригинальные. Исправлена бесконечная загрузка.
 // @author       you
 // @match        *://dynast.io/*
 // @run-at       document-start
@@ -30,7 +30,7 @@
     "port": 8080,
     "ping_port": 8880,
     "peer_key": null,
-    "client_count": 60,
+    "client_count": 6,
     "connections_limit": 60,
     "map": "pvp",
     "map_hash": "d0bc0fefa991ab5f899f81dd5da5a161",
@@ -41,9 +41,9 @@
     "top_player_level": 49,
     "load_avg": 3,
     "load_max": 3,
-    "backend": "https://dynast.cloud",
+    "backend": "https://auth.dynast.cloud",
     "region": "Russia",
-    "label": "Lastik_Gomir-0",
+    "label": "CRaft_pvp-0",
     "version": "1.3.7",
     "custom_mode": false,
     "private": false,
@@ -70,11 +70,12 @@
         // Клонируем шаблон и генерируем актуальное время для обхода бесконечной загрузки
         const activeServer = Object.assign({}, SERVER_TEMPLATE);
         
-        // Синхронизация времени сессии
+        // Синхронизация времени сессии (текущий timestamp в секундах)
         const currentTimestamp = Math.floor(Date.now() / 1000);
         activeServer.server_time = currentTimestamp;
-        activeServer.lifetime = currentTimestamp + 86400;
+        activeServer.lifetime = currentTimestamp + 86400; // Жизненный цикл сессии на сутки вперед
 
+        // Полностью перезаписываем массив
         data.servers = [activeServer];
 
         return new Response(JSON.stringify(data), {

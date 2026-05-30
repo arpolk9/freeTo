@@ -43,7 +43,7 @@
     "load_max": 3,
     "backend": "https://auth.dynast.cloud",
     "region": "Russia",
-    "label": "<b><#cb36ff>C<#bc30ff>R<#ad2aff>A<#9d24ff>F<#8e1eff>T<#7f18ff>_<#7012ff>P<#600cff>V<#5106ff>P",
+    "label": "<#cb36ff>C<#bc30ff>R<#ad2aff>A<#9d24ff>F<#8e1eff>T<#7f18ff>_<#7012ff>P<#600cff>V<#5106ff>P",
     "version": "1.3.7",
     "custom_mode": false,
     "private": false,

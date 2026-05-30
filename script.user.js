@@ -1,14 +1,12 @@
 // ==UserScript==
 // @name         Dynast.io — Custom PVP Only
-// @namespace    http://tampermonkey.net
+// @namespace    http://tampermonkey.net/
 // @version      1.3
 // @description  Оставляет только один кастомный PVP сервер, убирая все оригинальные
 // @author       you
 // @match        *://dynast.io/*
 // @run-at       document-start
 // @grant        none
-// @updateURL    ВСТАВЬ_СЮДА_СВОЮ_RAW_ССЫЛКУ
-// @downloadURL  ВСТАВЬ_СЮДА_СВОЮ_RAW_ССЫЛКУ
 // ==/UserScript==
 
 (function () {
@@ -16,8 +14,8 @@
 
   // НАСТРОЙКА АНТИ-АФК
   const INTERVAL_MIN = 3; // Интервал ходьбы в минутах
-  const W_TIME_MS = 4000;  // Как долго зажата кнопка W (в миллисекундах)
-  const S_TIME_MS = 4000;  // Как долго зажата кнопка S (в миллисекундах)
+  const W_TIME_MS = 3000;  // Как долго зажата кнопка W (в миллисекундах)
+  const S_TIME_MS = 3000;  // Как долго зажата кнопка S (в миллисекундах)
 
   let active = false;
   let timer = null;
@@ -42,7 +40,7 @@
       "top_player_level": 49,
       "load_avg": 3,
       "load_max": 3,
-      "backend": "https://dynast.cloud",
+      "backend": "https://auth.dynast.cloud",
       "region": "Russia",
       "label": "pvp-0",
       "version": "1.3.7",

@@ -31,7 +31,7 @@
     "ping_port": 8880,
     "peer_key": null,
     "client_count": 60,
-    "connections_limit": 100,
+    "connections_limit": 60,
     "map": "pvp",
     "map_hash": "d0bc0fefa991ab5f899f81dd5da5a161",
     "game_mode": "pvp",

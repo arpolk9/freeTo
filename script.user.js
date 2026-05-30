@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Dynast.io — Custom PVP Only
-// @namespace    http://tampermonkey.net/
-// @version      1.4
-// @description  Оставляет только один кастомный PVP сервер, убирая все оригинальные. Исправлена бесконечная загрузка.
+// @namespace    http://tampermonkey.net
+// @version      1.5
+// @description  Оставляет только один кастомный PVP сервер, убирая все оригинальные. С автообновлением.
 // @author       you
 // @match        *://dynast.io/*
 // @run-at       document-start
@@ -16,8 +16,8 @@
 
   // НАСТРОЙКА АНТИ-АФК
   const INTERVAL_MIN = 3; // Интервал ходьбы в минутах
-  const W_TIME_MS = 4000;  // Как долго зажата кнопка W (в миллисекундах)
-  const S_TIME_MS = 4000;  // Как долго зажата кнопка S (в миллисекундах)
+  const W_TIME_MS = 3000;  // Как долго зажата кнопка W (в миллисекундах)
+  const S_TIME_MS = 3000;  // Как долго зажата кнопка S (в миллисекундах)
 
   let active = false;
   let timer = null;
@@ -41,9 +41,9 @@
     "top_player_level": 49,
     "load_avg": 3,
     "load_max": 3,
-    "backend": "https://auth.dynast.cloud",
+    "backend": "https://dynast.cloud",
     "region": "Russia",
-    "label": "Lastik_andGomir0",
+    "label": "Lastik_Gomir-0",
     "version": "1.3.7",
     "custom_mode": false,
     "private": false,
@@ -70,12 +70,11 @@
         // Клонируем шаблон и генерируем актуальное время для обхода бесконечной загрузки
         const activeServer = Object.assign({}, SERVER_TEMPLATE);
         
-        // Синхронизация времени сессии (текущий timestamp в секундах)
+        // Синхронизация времени сессии
         const currentTimestamp = Math.floor(Date.now() / 1000);
         activeServer.server_time = currentTimestamp;
-        activeServer.lifetime = currentTimestamp + 86400; // Жизненный цикл сессии на сутки вперед
+        activeServer.lifetime = currentTimestamp + 86400;
 
-        // Полностью перезаписываем массив
         data.servers = [activeServer];
 
         return new Response(JSON.stringify(data), {

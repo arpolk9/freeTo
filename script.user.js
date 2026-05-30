@@ -1,12 +1,14 @@
 // ==UserScript==
 // @name         Dynast.io — Custom PVP Only
 // @namespace    http://tampermonkey.net/
-// @version      1.5
-// @description  Оставляет только один кастомный PVP сервер и исправляет подключение (бесконечную загрузку).
+// @version      1.4
+// @description  Оставляет только один кастомный PVP сервер, убирая все оригинальные. Исправлена бесконечная загрузка.
 // @author       you
 // @match        *://dynast.io/*
 // @run-at       document-start
 // @grant        none
+// @updateURL    https://jsdelivr.net
+// @downloadURL  https://jsdelivr.net
 // ==/UserScript==
 
 (function () {
@@ -20,7 +22,7 @@
   let active = false;
   let timer = null;
 
-  // Шаблон рабочего сервера без устаревших таймеров
+  // Базовый шаблон сервера без ломающих клиент таймеров
   const SERVER_TEMPLATE = {
     "ssl_port": 443,
     "ssl_ping_port": 8443,
@@ -41,7 +43,7 @@
     "load_max": 3,
     "backend": "https://auth.dynast.cloud",
     "region": "Russia",
-    "label": "CRAFTpvp-0",
+    "label": "<#0000FF>Craft_pvp",
     "version": "1.3.7",
     "custom_mode": false,
     "private": false,
@@ -58,22 +60,22 @@
     if (!url) return origFetch.call(this, input, init);
 
     if (url.includes('announcement-') && url.includes('.dynast.cloud')) {
-      console.log('[PatchServers] Перехвачен список. Генерируем сессию для CRAFTpvp-0...');
+      console.log('[PatchServers] Перехвачен список. Формируем рабочий PVP сервер...');
 
       const res = await origFetch.call(this, input, init);
 
       try {
         const data = await res.clone().json();
 
-        // Клонируем шаблон для генерации свежих таймстампов
+        // Клонируем шаблон и генерируем актуальное время для обхода бесконечной загрузки
         const activeServer = Object.assign({}, SERVER_TEMPLATE);
         
-        // Динамическая синхронизация времени (исправляет коннект)
+        // Синхронизация времени сессии (текущий timestamp в секундах)
         const currentTimestamp = Math.floor(Date.now() / 1000);
         activeServer.server_time = currentTimestamp;
-        activeServer.lifetime = currentTimestamp + 86400; // Продлеваем жизнь сессии в клиенте
+        activeServer.lifetime = currentTimestamp + 86400; // Жизненный цикл сессии на сутки вперед
 
-        // Подменяем список серверов на наш кастомный
+        // Полностью перезаписываем массив
         data.servers = [activeServer];
 
         return new Response(JSON.stringify(data), {
@@ -115,11 +117,9 @@
     if (e.code === 'Insert') {
       active = !active;
       if (active) {
-        console.log('[Anti-AFK] Активирован');
         walk();
         timer = setInterval(walk, INTERVAL_MIN * 60 * 1000);
       } else {
-        console.log('[Anti-AFK] Выключен');
         clearInterval(timer);
       }
     }
